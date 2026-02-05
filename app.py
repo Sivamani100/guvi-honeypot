@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+import os
 
 app = Flask(__name__)
 
@@ -11,7 +12,7 @@ def honeypot():
     if key != API_KEY:
         return jsonify({"error": "Invalid API key"}), 401
 
-    data = request.json
+    data = request.json or {}
     message = data.get("message", "").lower()
 
     signals = []
@@ -37,4 +38,5 @@ def honeypot():
     })
 
 if __name__ == "__main__":
-    app.run()
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)

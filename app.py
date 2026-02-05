@@ -5,8 +5,17 @@ app = Flask(__name__)
 
 API_KEY = "test123"   # use this in tester
 
-@app.route("/honeypot", methods=["POST"])
+@app.route("/honeypot", methods=["GET", "POST"])
 def honeypot():
+    if request.method == "GET":
+        return jsonify({
+            "message": "Honeypot API is running",
+            "endpoint": "/honeypot",
+            "method": "POST",
+            "headers": {"x-api-key": "test123"},
+            "body": {"message": "your message here"}
+        })
+    
     key = request.headers.get("x-api-key")
 
     if key != API_KEY:
